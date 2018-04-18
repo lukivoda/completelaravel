@@ -43310,9 +43310,15 @@ $(document).ready(function () {
         ["view", ["fullscreen"]]]
     });
 
+    $("#plus").click(function () {
+        $('#createForm').get(0).reset();
+        $("#writing").html();
+    });
+
     //adding post
     $("#addBtn").click(function (event) {
         //getting all the values that the user has entered
+
         var title = $("#title").val();
         var writing = $("#writing").val();
 
@@ -43485,6 +43491,45 @@ $(document).ready(function () {
     $(".reset").click(function () {
         $(".errors").html('');
     });
+
+    $(window).on('hashchange', function () {
+        if (window.location.hash) {
+            var page = window.location.hash.replace('#', '');
+            if (page == Number.NaN || page <= 0) {
+                return false;
+            } else {
+                getData(page);
+            }
+        }
+    });
+    $(document).ready(function () {
+        $(document).on('click', '.pagination a', function (event) {
+            $('li').removeClass('active');
+            $(this).parent('li').addClass('active');
+            event.preventDefault();
+            //var myurl = $(this).attr('href');
+            var page = $(this).attr('href').split('page=')[1];
+            getData(page);
+        });
+    });
+    function getData(page) {
+        $.ajax({
+            url: '?page=' + page,
+            type: "get",
+            datatype: "html"
+            // beforeSend: function()
+            // {
+            //     you can show your loader
+            // }
+        }).done(function (data) {
+            console.log(data);
+
+            $("#post_container").empty().html(data);
+            location.hash = page;
+        }).fail(function (jqXHR, ajaxOptions, thrownError) {
+            alert('No response from server');
+        });
+    }
 
     //{'title':title,'category':category,'tags':tags,'writing':writing,'_token':$('input[name=_token]').val()}
 });

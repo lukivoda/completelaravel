@@ -26,11 +26,17 @@ class PostController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function create()
+    public function create(Request $request)
     {
-        $posts = Post::orderBy('created_at','desc')->get();
+        $posts = Post::orderBy('created_at','desc')->paginate(5);
         $categories = Category::all();
         $tags = Tag::all();
+
+        if ($request->ajax()) {
+            return view('admin.partials.presult', compact('posts','categories','tags'));
+        }
+
+
       return view('admin.posts.create',compact('posts','categories','tags'));
     }
 

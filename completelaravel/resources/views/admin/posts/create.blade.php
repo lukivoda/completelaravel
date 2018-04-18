@@ -7,36 +7,12 @@
     <div class="col-lg-offset-2 col-lg-7">
         <div class="panel panel-default">
             <div class="panel-heading">
-                <h3 class="panel-title">List of posts <span class='pull-right' data-toggle="tooltip" title="Add post"> <a  data-toggle="modal" data-target="#myModal" class="pull-right" href=""><i class="fa fa-plus "> </i></a></span></h3>
+                <h3 class="panel-title">List of posts <span class='pull-right' data-toggle="tooltip" title="Add post"> <a id="plus" data-toggle="modal" data-target="#myModal" class="pull-right" href=""><i class="fa fa-plus "> </i></a></span></h3>
             </div>
             <div class="panel-body">
-                <table   class="table table-hover">
-                    <thead>
-                    <tr>
-                        <th>featured image</th>
-                        <th>category</th>
-                        <th>title</th>
-                        <th>tags</th>
-                    </tr>
-                    </thead>
-                    <tbody id="postBox" >
-
-                    @foreach($posts as $post)
-                    <tr >
-                        <td ><img  width="60" height="40" src="{{asset('images/'.$post->featured)}}" alt=""></td>
-                        <td>{{$post->category->name}}</td>
-                        <td>{{$post->title}}</td>
-                        <td>
-                            @foreach($post->tags as $tag)
-                            <span style="cursor: auto !important;" class="btn btn-info btn-xs">{{$tag->name}}</span>
-                            @endforeach
-                        </td>
-                        <td ><a  data-target="#myModalUpdate" data-toggle="modal"  data-id="{{$post->id}}" class="btn btn-warning btn-sm updateBtn"  href="#">Update</a></td>
-                    </tr>
-                   @endforeach
-                    </tbody>
-                </table>
-
+            <div id="post_container">
+              @include("admin.partials.presult")
+            </div>
             </div>
         </div>
     </div>
