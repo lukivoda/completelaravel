@@ -8,6 +8,7 @@ use App\Post;
 use App\Tag;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
+use Illuminate\Support\Facades\Storage;
 
 class PostController extends Controller
 {
@@ -148,11 +149,13 @@ class PostController extends Controller
             $featuredExtension = $featured->getClientOriginalExtension();
             $featuredSize = $featured->getClientSize();
             if(in_array($featuredExtension,$extensions) && $featuredSize < 2097152) {
+                $old_image_name = $post->featured;
                 $featured_new_name = time() . $featured->getClientOriginalName();
                 $featured->move("images", $featured_new_name);
                 $post->featured = $featured_new_name;
 
                 $post->save();
+                unlink('images/' .  $old_image_name);
                 $post->tags()->sync($tags);
 
 
@@ -186,11 +189,20 @@ class PostController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
+     * @param Request $request
+     * @return Request
+     * @throws \Exception
      */
-    public function destroy($id)
+
+
+    public function destroy(Request $request)
     {
-        //
+
+        $id = $request->id;
+        $post= Post::find($id);
+        $post->delete();
+        unlink('images/' . $post->featured);
+
+
     }
 }

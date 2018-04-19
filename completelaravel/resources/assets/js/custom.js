@@ -217,6 +217,46 @@ $(document).ready(function(){
 
 
 
+    //deleting the movies row(frontend) after deleting it in the database
+    $(document).on("click", ".confirm", function(e) {
+        e.preventDefault();
+        // saving $(this)(clicked delete button) in variable so that we can use it in the callback function
+        var id = $("#id").val();
+
+        //using bootbox modal plugin
+        bootbox.confirm({
+            message: "Are you sure you want to delete this movie?",
+            buttons: {
+                confirm: {
+                    label: 'Yes',
+                    className: 'btn-success'
+                },
+                cancel: {
+                    label: 'No',
+                    className: 'btn-danger'
+                }
+            },
+            callback: function (result) {
+                if (result === true) {
+                    //we are getting the value of the attribute from the button(a)
+
+                    $.ajax({
+                        url: "/posts/delete",
+                        //we need to send the id of the movie to be deleted
+                        data: {'id':id,'_token':$('input[name=_token]').val()},
+                        type: "POST",
+                        success: function (data) {
+                            $("#postBox").load("http://www.completelaravel.com/posts/create #postBox > *");
+                        }
+                    });
+                }
+            }
+        })
+    });
+
+
+
+
 
 
 
@@ -228,6 +268,8 @@ $(document).ready(function(){
     });
 
 
+
+    //ajax pagination
     $(window).on('hashchange', function() {
         if (window.location.hash) {
             var page = window.location.hash.replace('#', '');
@@ -255,17 +297,17 @@ $(document).ready(function(){
             {
                 url: '?page=' + page,
                 type: "get",
-                datatype: "html"
-                // beforeSend: function()
-                // {
-                //     you can show your loader
-                // }
+                datatype: "html",
+                beforeSend: function()
+                {
+                    $("#post_container").html("<img style='margin-left:40%;width:100px' src='/images/loader.gif'> ");
+                }
             })
             .done(function(data)
             {
                 console.log(data);
 
-                $("#post_container").empty().html(data);
+                $("#post_container").html(data);
                 location.hash = page;
             })
             .fail(function(jqXHR, ajaxOptions, thrownError)
@@ -273,6 +315,14 @@ $(document).ready(function(){
                 alert('No response from server');
             });
     }
+
+
+
+
+
+
+
+
 
 
 

@@ -23,6 +23,8 @@ Route::resource('/posts', 'PostController');
 
 Route::post("/posts/update","PostController@update")->name('posts.update');
 
+Route::post("/posts/delete/","PostController@destroy")->name('posts.destroy');
+
 Route::resource('/categories','CategoryController');
 
 Route::resource('/tags','TagController');

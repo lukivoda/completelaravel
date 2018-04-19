@@ -159,7 +159,7 @@
                         <div class="modal-footer">
                             <div class="form-group">
                                 <div class="pull-right">
-                                    <button type="reset" class="btn btn-default reset" data-dismiss="modal">Close</button>
+                                    <a type="button" class="confirm btn btn-danger reset" data-dismiss="modal">Delete</a>
                                     <button type="button" id="saveUpdateBtn" class="btn btn-primary" >Save changes</button>
                                 </div>
                             </div>

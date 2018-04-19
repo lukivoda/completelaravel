@@ -3,7 +3,8 @@ textarea#writingUpdate{
 }
 
 #post_container > ul.pagination {
-    margin-left:35%;
+    position:absolute;
+    margin-left:30%;
 }
 
 #post_container > ul.pagination li.active span{
