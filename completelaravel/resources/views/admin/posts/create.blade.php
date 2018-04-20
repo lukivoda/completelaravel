@@ -46,7 +46,9 @@
 
                             <label for="featured">Featured image</label>
 
-                            <input type="file" id="featured" name="featured" class="form-control">
+
+                            <input type="file" id="featured" name="featured" class="form-control" accept="image/*" onchange="loadFile(event)">
+                            <img width="100" id="output"/>
 
                         </div>
 
@@ -124,8 +126,10 @@
                         <div class="form-group">
 
                             <label for="featured">Featured image</label><br>
-                            <img id="imageShown"  width="60" height="40" src="" alt="">
-                            <input type="file" id="featuredUpdate" name="featured" class="form-control">
+
+                            <input type="file" id="featuredUpdate" name="featured" class="form-control" accept="image/*" onchange="loadFileUpdate(event)"  >
+                            <img id="imageShown"  width="100" height="100" src="" alt="">
+                            <img id="outputUpdate" style="display:none" width="100" height="100">
 
                         </div>
 

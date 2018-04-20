@@ -76,6 +76,8 @@
 
                 <!-- Optionally, you can add icons to the links -->
                 <li class="active"><a href="{{route('posts.create')}}"><i class="fa fa-link"></i> <span>Posts</span></a></li>
+                <li class="active"><a href="{{route('categories.create')}}"><i class="fa fa-link"></i> <span>Categories</span></a></li>
+                <li class="active"><a href="{{route('tags.create')}}"><i class="fa fa-link"></i> <span>Tags</span></a></li>
 
 
             </ul>
@@ -118,8 +120,40 @@
     immediately after the control sidebar -->
 
 </div>
+<script>
+    //functions for previewing images before upload(for creating and updating post)
+
+    var loadFile = function(event) {
+        var reader = new FileReader();
+        reader.onload = function(){
+            var output = document.getElementById('output');
+            output.src = reader.result;
+        };
+        reader.readAsDataURL(event.target.files[0]);
+    };
+
+    var loadFileUpdate = function(event) {
+        var reader = new FileReader();
+        reader.onload = function(){
+            var shownImage = document.getElementById('imageShown');
+            shownImage.src= "";
+            var output = document.getElementById('outputUpdate');
+            output.src = reader.result;
+            output.style.display ="block";
+        };
+        reader.readAsDataURL(event.target.files[0]);
+    };
+
+
+
+
+</script>
+
+
+
 
 <script src="{{asset('js/app.js')}}"></script>
+
 <script src="https://cdnjs.cloudflare.com/ajax/libs/summernote/0.8.9/summernote.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/bootbox.js/4.4.0/bootbox.min.js"></script>
 </body>

@@ -25,3 +25,7 @@ const app = new Vue({
 require("admin-lte");
 
 require("./custom");
+
+require("./categories");
+
+require("./tags");

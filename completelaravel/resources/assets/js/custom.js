@@ -1,3 +1,5 @@
+
+
 $(document).ready(function(){
     //tooltip for plus sign(adding post)
     $('[data-toggle="tooltip"]').tooltip();
@@ -36,6 +38,9 @@ $(document).ready(function(){
     //adding post
     $("#addBtn").click(function(event){
         //getting all the values that the user has entered
+
+        $("#output").attr("src","");
+
 
         var title = $("#title").val();
         var writing = $("#writing").val();
@@ -161,6 +166,8 @@ $(document).ready(function(){
         var title = $("#updateTitle").val();
         var writing = $("#writingUpdate").val();
 
+
+
         var category = $("#categoryUpdate").val();
 
          var id = $("#id").val();
@@ -192,6 +199,9 @@ $(document).ready(function(){
             type: 'POST',
             success:function(response) {
                 console.log(response);
+
+                //hide the preview image
+                $("#outputUpdate").hide();
                 //hiding modal
                 $('#myModalUpdate').modal('hide');
                 //resetting form
@@ -224,8 +234,9 @@ $(document).ready(function(){
         var id = $("#id").val();
 
         //using bootbox modal plugin
+        bootbox.hideAll();
         bootbox.confirm({
-            message: "Are you sure you want to delete this movie?",
+            message: "Are you sure you want to delete this post?",
             buttons: {
                 confirm: {
                     label: 'Yes',
@@ -315,6 +326,9 @@ $(document).ready(function(){
                 alert('No response from server');
             });
     }
+
+
+
 
 
 

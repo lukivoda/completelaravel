@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Tag;
 use Illuminate\Http\Request;
 
 class TagController extends Controller
@@ -23,7 +24,9 @@ class TagController extends Controller
      */
     public function create()
     {
-        //
+        $tags= Tag::all();
+
+        return view('admin.tags.create',compact('tags'));
     }
 
     /**
@@ -34,8 +37,18 @@ class TagController extends Controller
      */
     public function store(Request $request)
     {
-        //
+
+        $this->validate($request, [
+            'tag_name' => 'required|unique:tags,name',
+        ]);
+
+        $tag = new Tag;
+        $tag->name =$request->tag_name;
+        $tag->save();
+
+
     }
+
 
     /**
      * Display the specified resource.
@@ -56,7 +69,10 @@ class TagController extends Controller
      */
     public function edit($id)
     {
-        //
+        $tag = Tag::find($id);
+        $tag_name = $tag->name;
+        $data['tag_name'] =  $tag_name;
+        return $data;
     }
 
     /**
@@ -66,9 +82,18 @@ class TagController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(Request $request)
     {
-        //
+        $this->validate($request,[
+            'tag_name' => 'required',
+        ]);
+
+        $id = $request->id;
+        $tag =  Tag::find($id);
+        $tag->name = $request->tag_name;
+        $tag->save();
+
+
     }
 
     /**
@@ -77,8 +102,11 @@ class TagController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(Request $request)
     {
-        //
+        $id = $request->id;
+        $tag = Tag::find($id);
+        $tag->delete();
     }
+
 }

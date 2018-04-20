@@ -9080,6 +9080,11 @@ textarea#writingUpdate{
 
     padding:0;
     font-size:12px;
+}
+
+
+body > div:nth-child(8) > div > div > div.modal-body > button {
+    display: none;
 }@charset "UTF-8";
 
 /*!

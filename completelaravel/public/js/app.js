@@ -997,6 +997,10 @@ __webpack_require__(42);
 
 __webpack_require__(43);
 
+__webpack_require__(70);
+
+__webpack_require__(71);
+
 /***/ }),
 /* 11 */
 /***/ (function(module, exports, __webpack_require__) {
@@ -43293,6 +43297,8 @@ if("undefined"==typeof jQuery)throw new Error("AdminLTE requires jQuery");+funct
 /* 43 */
 /***/ (function(module, exports) {
 
+
+
 $(document).ready(function () {
     //tooltip for plus sign(adding post)
     $('[data-toggle="tooltip"]').tooltip();
@@ -43318,6 +43324,8 @@ $(document).ready(function () {
     //adding post
     $("#addBtn").click(function (event) {
         //getting all the values that the user has entered
+
+        $("#output").attr("src", "");
 
         var title = $("#title").val();
         var writing = $("#writing").val();
@@ -43466,6 +43474,9 @@ $(document).ready(function () {
             type: 'POST',
             success: function success(response) {
                 console.log(response);
+
+                //hide the preview image
+                $("#outputUpdate").hide();
                 //hiding modal
                 $('#myModalUpdate').modal('hide');
                 //resetting form
@@ -43494,8 +43505,9 @@ $(document).ready(function () {
         var id = $("#id").val();
 
         //using bootbox modal plugin
+        bootbox.hideAll();
         bootbox.confirm({
-            message: "Are you sure you want to delete this movie?",
+            message: "Are you sure you want to delete this post?",
             buttons: {
                 confirm: {
                     label: 'Yes',
@@ -43576,6 +43588,387 @@ $(document).ready(function () {
 /***/ (function(module, exports) {
 
 // removed by extract-text-webpack-plugin
+
+/***/ }),
+/* 45 */,
+/* 46 */,
+/* 47 */,
+/* 48 */,
+/* 49 */,
+/* 50 */,
+/* 51 */,
+/* 52 */,
+/* 53 */,
+/* 54 */,
+/* 55 */,
+/* 56 */,
+/* 57 */,
+/* 58 */,
+/* 59 */,
+/* 60 */,
+/* 61 */,
+/* 62 */,
+/* 63 */,
+/* 64 */,
+/* 65 */,
+/* 66 */,
+/* 67 */,
+/* 68 */,
+/* 69 */,
+/* 70 */
+/***/ (function(module, exports) {
+
+$(document).ready(function () {
+    //tooltip for plus sign(adding category)
+    $('[data-toggle="tooltip"]').tooltip();
+
+    //adding post
+    $("#addBtnCategory").click(function (event) {
+        //getting all the values that the user has entered
+        var categoryName = $("#categoryName").val();
+        console.log(categoryName);
+        var _token = $('input[name =_token]').val();
+        //appending all data to our form object
+        //ajax request to our store method
+        $.ajax({
+            url: '/categories',
+            data: { 'categoryName': categoryName, '_token': _token },
+            type: 'POST',
+            success: function success(response) {
+                console.log(response);
+                //loading table after success
+
+                //hiding modal
+                $('#myModal').modal('hide');
+                //resetting form
+                $("#createForm")[0].reset();
+                //loading only the table
+                $("#postBox").load("http://www.completelaravel.com/categories/create #postBox > *");
+            },
+            error: function error(data) {
+                //emptying the error div
+                $(".errors").html('');
+                //errors from controller@edit in json
+                var errors = data.responseJSON;
+                var x;
+                //printing the errors on errors div(appending the error )
+                for (x in errors) {
+                    $(".errors").append("<div class='alert alert-danger'>" + errors[x][0] + "</div>");
+                }
+                // Render the errors with js ...
+            }
+        });
+    });
+
+    //clicking on update link
+    $(document).on('click', '.updateCategoryBtn', function (event) {
+
+        //preventing the default behaviour of <a> tag
+        event.preventDefault();
+        $(".errorsUpdate").html('');
+        $(".errors").html('');
+        //getting the id for the post that we clicked
+        var id = $(this).attr("data-id");
+        $("#id").val(id);
+        //ajax request to server(edit method) and getting the result
+        $.get('/categories/' + id + '/edit', { 'id': id, '_token': $('input[name=_token]').val() }, function (data) {
+            //data from server
+            //console.log(data);
+            //filling the title input
+            $("#updateCategory").val(data.category_name);
+        });
+    });
+
+    //clicking on save changes after update
+    $("#saveUpdateCategoryBtn").on("click", function () {
+
+        var id = $("#id").val();
+        console.log(id);
+        //getting all the values that the user has entered
+        var categoryName = $("#updateCategory").val();
+        console.log(categoryName);
+        var _token = $('input[name=_token]').val();
+        // appending all data to our form object
+
+
+        $.ajax({
+            url: '/categories/update',
+            data: { 'id': id, 'categoryName': categoryName, '_token': _token },
+            type: 'POST',
+            success: function success(response) {
+                console.log(response);
+                //hiding modal
+                $('#myModalUpdate').modal('hide');
+                //resetting form
+                $("#updateForm")[0].reset();
+                //loading only the table
+                $("#postBox").load("http://www.completelaravel.com/categories/create #postBox > *");
+            },
+            error: function error(data) {
+                //errors from controller@edit in json
+                console.log(data);
+                var errors = data.responseJSON;
+                var x;
+                //printing the errors on errors div(appending the error )
+                for (x in errors) {
+                    $(".errorsUpdate").append("<div class='alert alert-danger'>" + errors[x][0] + "</div>");
+                }
+                // Render the errors with js ...
+            }
+        });
+    });
+
+    //deleting the movies row(frontend) after deleting it in the database
+    $(document).on("click", ".confirmBtnDeleteCategory", function (e) {
+        e.preventDefault();
+        // saving $(this)(clicked delete button) in variable so that we can use it in the callback function
+        var id = $("#id").val();
+
+        //using bootbox modal plugin
+        // bootbox.prompt({
+        //
+        //     message: "Are you sure you want to delete this category?",
+        //     buttons: {
+        //         confirm: {
+        //             label: 'Yes',
+        //             className: 'btn-success'
+        //         },
+        //         cancel: {
+        //             label: 'No',
+        //             className: 'btn-danger'
+        //         }
+        //     },
+        //     callback: function (result) {
+        //         if (result === true) {
+        //             //we are getting the value of the attribute from the button(a)
+        //
+        //             $.ajax({
+        //                 url: "/categories/delete",
+        //                 //we need to send the id of the movie to be deleted
+        //                 data: {'id':id,'_token':$('input[name=_token]').val()},
+        //                 type: "POST",
+        //                 success: function (data) {
+        //                     $("#postBox").load("http://www.completelaravel.com/categories/create #postBox > *");
+        //                 }
+        //             });
+        //         }
+        //     }
+        // })
+
+
+        var dialog = bootbox.dialog({
+
+            message: "<p>Are you sure you want to delete this category?</p>",
+            buttons: {
+                cancel: {
+                    label: "No",
+                    className: 'btn-danger',
+                    callback: function callback() {
+                        bootbox.hideAll();
+                    }
+                },
+                ok: {
+                    label: "Yes",
+                    className: 'btn-success',
+                    callback: function callback() {
+                        //we are getting the value of the attribute from the button(a)
+                        $.ajax({
+                            url: "/categories/delete",
+                            //we need to send the id of the movie to be deleted
+                            data: { 'id': id, '_token': $('input[name=_token]').val() },
+                            type: "POST",
+                            success: function success(data) {
+                                $("#postBox").load("http://www.completelaravel.com/categories/create #postBox > *");
+                            },
+                            error: function error(data) {
+                                console.log(data);
+                            }
+                        });
+                        bootbox.hideAll();
+                    }
+                }
+            }
+        });
+    });
+});
+
+/***/ }),
+/* 71 */
+/***/ (function(module, exports) {
+
+$(document).ready(function () {
+    //tooltip for plus sign(adding category)
+    $('[data-toggle="tooltip_tag"]').tooltip();
+
+    //adding post
+    $("#addBtnTag").click(function (event) {
+        //getting all the values that the user has entered
+        var tag_name = $("#tag-name").val();
+        console.log(tag_name);
+        var _token = $('input[name =_token]').val();
+        //appending all data to our form object
+        //ajax request to our store method
+        $.ajax({
+            url: '/tags',
+            data: { 'tag_name': tag_name, '_token': _token },
+            type: 'POST',
+            success: function success(response) {
+                console.log(response);
+                //loading table after success
+
+                //hiding modal
+                $('#myModal').modal('hide');
+                //resetting form
+                $("#createForm")[0].reset();
+                //loading only the table
+                $("#postBox").load("http://www.completelaravel.com/tags/create #postBox > *");
+            },
+            error: function error(data) {
+                //emptying the error div
+                $(".errors").html('');
+                //errors from controller@edit in json
+                var errors = data.responseJSON;
+                var x;
+                //printing the errors on errors div(appending the error )
+                for (x in errors) {
+                    $(".errors").append("<div class='alert alert-danger'>" + errors[x][0] + "</div>");
+                }
+                // Render the errors with js ...
+            }
+        });
+    });
+
+    //clicking on update link
+    $(document).on('click', '.updateTagBtn', function (event) {
+
+        //preventing the default behaviour of <a> tag
+        event.preventDefault();
+        $(".errorsUpdate").html('');
+        $(".errors").html('');
+        //getting the id for the post that we clicked
+        var id = $(this).attr("data-id");
+        $("#id").val(id);
+        //ajax request to server(edit method) and getting the result
+        $.get('/tags/' + id + '/edit', { 'id': id, '_token': $('input[name=_token]').val() }, function (data) {
+            //data from server
+            //console.log(data);
+            //filling the title input
+            $("#updateTag").val(data.tag_name);
+        });
+    });
+
+    //clicking on save changes after update
+    $("#saveUpdateTagBtn").on("click", function () {
+
+        var id = $("#id").val();
+        console.log(id);
+        //getting all the values that the user has entered
+        var tag_name = $("#updateTag").val();
+        console.log(tag_name);
+        var _token = $('input[name=_token]').val();
+        // appending all data to our form object
+
+
+        $.ajax({
+            url: '/tags/update',
+            data: { 'id': id, 'tag_name': tag_name, '_token': _token },
+            type: 'POST',
+            success: function success(response) {
+                console.log(response);
+                //hiding modal
+                $('#myModalUpdate').modal('hide');
+                //resetting form
+                $("#updateForm")[0].reset();
+                //loading only the table
+                $("#postBox").load("http://www.completelaravel.com/tags/create #postBox > *");
+            },
+            error: function error(data) {
+                //errors from controller@edit in json
+                console.log(data);
+                var errors = data.responseJSON;
+                var x;
+                //printing the errors on errors div(appending the error )
+                for (x in errors) {
+                    $(".errorsUpdate").append("<div class='alert alert-danger'>" + errors[x][0] + "</div>");
+                }
+                // Render the errors with js ...
+            }
+        });
+    });
+
+    //deleting the movies row(frontend) after deleting it in the database
+    $(document).on("click", ".confirmBtnDeleteTag", function (e) {
+        e.preventDefault();
+        // saving $(this)(clicked delete button) in variable so that we can use it in the callback function
+        var id = $("#id").val();
+
+        //using bootbox modal plugin
+        // bootbox.prompt({
+        //
+        //     message: "Are you sure you want to delete this category?",
+        //     buttons: {
+        //         confirm: {
+        //             label: 'Yes',
+        //             className: 'btn-success'
+        //         },
+        //         cancel: {
+        //             label: 'No',
+        //             className: 'btn-danger'
+        //         }
+        //     },
+        //     callback: function (result) {
+        //         if (result === true) {
+        //             //we are getting the value of the attribute from the button(a)
+        //
+        //             $.ajax({
+        //                 url: "/categories/delete",
+        //                 //we need to send the id of the movie to be deleted
+        //                 data: {'id':id,'_token':$('input[name=_token]').val()},
+        //                 type: "POST",
+        //                 success: function (data) {
+        //                     $("#postBox").load("http://www.completelaravel.com/categories/create #postBox > *");
+        //                 }
+        //             });
+        //         }
+        //     }
+        // })
+
+
+        var dialog = bootbox.dialog({
+
+            message: "<p>Are you sure you want to delete this tag?</p>",
+            buttons: {
+                cancel: {
+                    label: "No",
+                    className: 'btn-danger',
+                    callback: function callback() {
+                        bootbox.hideAll();
+                    }
+                },
+                ok: {
+                    label: "Yes",
+                    className: 'btn-success',
+                    callback: function callback() {
+                        //we are getting the value of the attribute from the button(a)
+                        $.ajax({
+                            url: "/tags/delete",
+                            //we need to send the id of the movie to be deleted
+                            data: { 'id': id, '_token': $('input[name=_token]').val() },
+                            type: "POST",
+                            success: function success(data) {
+                                $("#postBox").load("http://www.completelaravel.com/tags/create #postBox > *");
+                            },
+                            error: function error(data) {
+                                console.log(data);
+                            }
+                        });
+                        bootbox.hideAll();
+                    }
+                }
+            }
+        });
+    });
+});
 
 /***/ })
 /******/ ]);

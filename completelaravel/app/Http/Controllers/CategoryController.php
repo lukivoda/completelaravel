@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Category;
 use Illuminate\Http\Request;
 
 class CategoryController extends Controller
@@ -23,7 +24,9 @@ class CategoryController extends Controller
      */
     public function create()
     {
-        //
+       $categories = Category::all();
+
+       return view('admin.categories.create',compact('categories'));
     }
 
     /**
@@ -34,8 +37,18 @@ class CategoryController extends Controller
      */
     public function store(Request $request)
     {
-        //
+
+        $this->validate($request, [
+            'categoryName' => 'required|unique:categories,name',
+        ]);
+
+        $category = new Category;
+        $category->name =$request->categoryName;
+       $category->save();
+
+
     }
+
 
     /**
      * Display the specified resource.
@@ -56,7 +69,10 @@ class CategoryController extends Controller
      */
     public function edit($id)
     {
-        //
+        $category = Category::find($id);
+        $category_name = $category->name;
+        $data['category_name'] =  $category_name;
+        return $data;
     }
 
     /**
@@ -66,9 +82,18 @@ class CategoryController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(Request $request)
     {
-        //
+        $this->validate($request,[
+            'categoryName' => 'required',
+        ]);
+
+        $id = $request->id;
+        $category =  Category::find($id);
+        $category->name = $request->categoryName;
+        $category->save();
+
+
     }
 
     /**
@@ -77,8 +102,11 @@ class CategoryController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(Request $request)
     {
-        //
+        $id = $request->id;
+        $category = Category::find($id);
+        $category->delete();
     }
+
 }

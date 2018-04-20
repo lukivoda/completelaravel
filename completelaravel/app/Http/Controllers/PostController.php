@@ -155,6 +155,7 @@ class PostController extends Controller
                 $post->featured = $featured_new_name;
 
                 $post->save();
+                //deleting old image from storage after inserting new one
                 unlink('images/' .  $old_image_name);
                 $post->tags()->sync($tags);
 
@@ -201,6 +202,7 @@ class PostController extends Controller
         $id = $request->id;
         $post= Post::find($id);
         $post->delete();
+        //deleting old image from storage after deleting the post
         unlink('images/' . $post->featured);
 
 

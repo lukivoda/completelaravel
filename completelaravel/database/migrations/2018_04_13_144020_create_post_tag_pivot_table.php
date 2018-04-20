@@ -18,7 +18,7 @@ class CreatePostTagPivotTable extends Migration
             $table->integer('tag_id')->unsigned();
             $table->timestamps();
 
-            $table->foreign('post_id')->references('id')->on('posts');
+            $table->foreign('post_id')->references('id')->on('posts')->onDelete('cascade');
             $table->foreign('tag_id')->references('id')->on('tags');
         });
     }
