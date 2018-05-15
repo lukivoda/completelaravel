@@ -963,7 +963,7 @@ module.exports = Cancel;
 /***/ (function(module, exports, __webpack_require__) {
 
 __webpack_require__(10);
-module.exports = __webpack_require__(44);
+module.exports = __webpack_require__(48);
 
 
 /***/ }),
@@ -997,9 +997,13 @@ __webpack_require__(42);
 
 __webpack_require__(43);
 
-__webpack_require__(70);
+__webpack_require__(44);
 
-__webpack_require__(71);
+__webpack_require__(45);
+
+__webpack_require__(46);
+
+__webpack_require__(47);
 
 /***/ }),
 /* 11 */
@@ -43297,9 +43301,61 @@ if("undefined"==typeof jQuery)throw new Error("AdminLTE requires jQuery");+funct
 /* 43 */
 /***/ (function(module, exports) {
 
+/**
+ * Javascript-Equal-Height-Responsive-Rows
+ * https://github.com/Sam152/Javascript-Equal-Height-Responsive-Rows
+ */
+(function ($) {
+  'use strict';
+  $.fn.equalHeight = function () {
+    var heights = [];$.each(this, function (i, element) {
+      var $element = $(element);var elementHeight;var includePadding = $element.css('box-sizing') === 'border-box' || $element.css('-moz-box-sizing') === 'border-box';if (includePadding) {
+        elementHeight = $element.innerHeight();
+      } else {
+        elementHeight = $element.height();
+      }
+      heights.push(elementHeight);
+    });this.css('height', Math.max.apply(window, heights) + 'px');return this;
+  };$.fn.equalHeightGrid = function (columns) {
+    var $tiles = this.filter(':visible');$tiles.css('height', 'auto');for (var i = 0; i < $tiles.length; i++) {
+      if (i % columns === 0) {
+        var row = $($tiles[i]);for (var n = 1; n < columns; n++) {
+          row = row.add($tiles[i + n]);
+        }
+        row.equalHeight();
+      }
+    }
+    return this;
+  };$.fn.detectGridColumns = function () {
+    var offset = 0,
+        cols = 0,
+        $tiles = this.filter(':visible');$tiles.each(function (i, elem) {
+      var elemOffset = $(elem).offset().top;if (offset === 0 || elemOffset === offset) {
+        cols++;offset = elemOffset;
+      } else {
+        return false;
+      }
+    });return cols;
+  };var grids_event_uid = 0;$.fn.responsiveEqualHeightGrid = function () {
+    var _this = this;var event_namespace = '.grids_' + grids_event_uid;_this.data('grids-event-namespace', event_namespace);function syncHeights() {
+      var cols = _this.detectGridColumns();_this.equalHeightGrid(cols);
+    }
+    $(window).bind('resize' + event_namespace + ' load' + event_namespace, syncHeights);syncHeights();grids_event_uid++;return this;
+  };$.fn.responsiveEqualHeightGridDestroy = function () {
+    var _this = this;_this.css('height', 'auto');$(window).unbind(_this.data('grids-event-namespace'));return this;
+  };
+})(window.jQuery);
+
+/***/ }),
+/* 44 */
+/***/ (function(module, exports) {
+
 
 
 $(document).ready(function () {
+
+    $('.element').responsiveEqualHeightGrid();
+
     //tooltip for plus sign(adding post)
     $('[data-toggle="tooltip"]').tooltip();
     //in the textarea
@@ -43566,10 +43622,12 @@ $(document).ready(function () {
         $.ajax({
             url: '?page=' + page,
             type: "get",
-            datatype: "html",
-            beforeSend: function beforeSend() {
-                $("#post_container").html("<img style='margin-left:40%;width:100px' src='/images/loader.gif'> ");
-            }
+            datatype: "html"
+            //for loading image
+            // beforeSend: function()
+            // {
+            //     $("#post_container").html("<img style='margin-left:40%;width:100px' src='/images/loader.gif'> ");
+            // }
         }).done(function (data) {
             console.log(data);
 
@@ -43584,38 +43642,7 @@ $(document).ready(function () {
 });
 
 /***/ }),
-/* 44 */
-/***/ (function(module, exports) {
-
-// removed by extract-text-webpack-plugin
-
-/***/ }),
-/* 45 */,
-/* 46 */,
-/* 47 */,
-/* 48 */,
-/* 49 */,
-/* 50 */,
-/* 51 */,
-/* 52 */,
-/* 53 */,
-/* 54 */,
-/* 55 */,
-/* 56 */,
-/* 57 */,
-/* 58 */,
-/* 59 */,
-/* 60 */,
-/* 61 */,
-/* 62 */,
-/* 63 */,
-/* 64 */,
-/* 65 */,
-/* 66 */,
-/* 67 */,
-/* 68 */,
-/* 69 */,
-/* 70 */
+/* 45 */
 /***/ (function(module, exports) {
 
 $(document).ready(function () {
@@ -43781,7 +43808,8 @@ $(document).ready(function () {
                                 $("#postBox").load("http://www.completelaravel.com/categories/create #postBox > *");
                             },
                             error: function error(data) {
-                                console.log(data);
+                                var errors = data.responseJSON;
+                                console.log(errors);
                             }
                         });
                         bootbox.hideAll();
@@ -43793,7 +43821,7 @@ $(document).ready(function () {
 });
 
 /***/ }),
-/* 71 */
+/* 46 */
 /***/ (function(module, exports) {
 
 $(document).ready(function () {
@@ -43969,6 +43997,272 @@ $(document).ready(function () {
         });
     });
 });
+
+/***/ }),
+/* 47 */
+/***/ (function(module, exports) {
+
+$(document).ready(function () {
+
+    $('.modal').on('hidden.bs.modal', function () {
+        $("input[type='file']").val('');
+        $("#output").attr("src", "");
+    });
+
+    // $("body").on("click","#plus,.upload-btn-wrapper",function(){
+    //  $("#output").attr("src","");
+    // }) ;
+
+
+    $(document).on('click', "#plus", function () {
+        $(".errors").html('');
+    });
+
+    $("#addAlbumBtn").click(function () {
+
+        var albumName = $("#albumTitle").val();
+        var _token = $('input[name=_token]').val();
+        var description = $("#albumDescription").val();
+        var coverImage = $("#coverImage")[0].files[0];
+        form = new FormData();
+        form.append('albumName', albumName);
+        form.append('_token', _token);
+        form.append('description', description);
+        form.append('coverImage', coverImage);
+
+        $.ajax({
+            url: '/albums',
+            data: form,
+            cache: false,
+            contentType: false,
+            processData: false,
+            type: 'POST',
+            success: function success(response) {
+                //console.log(response);
+                //loading table after success
+
+                //hiding modal
+                $('#myModal').modal('hide');
+                //resetting form
+                $("#createForm")[0].reset();
+                //loading only the table
+                $("#albumBox").load("http://www.completelaravel.com/albums #albumBox > *");
+            },
+            error: function error(data) {
+                //emptying the error div
+                $(".errors").html('');
+                //errors from controller@edit in json
+                var errors = data.responseJSON;
+                var x;
+                //printing the errors on errors div(appending the error )
+                for (x in errors) {
+                    $(".errors").append("<div class='alert alert-danger'>" + errors[x][0] + "</div>");
+                }
+                // Render the errors with js ...
+            }
+        });
+    });
+
+    $("#addPhotoBtn").click(function () {
+        var photoName = $("#photoName").val();
+        var albumId = $("#albumId").val();
+        var _token = $('input[name=_token]').val();
+        var photo = $("#photo")[0].files[0];
+        form = new FormData();
+        form.append('photoName', photoName);
+        form.append('_token', _token);
+        form.append('photo', photo);
+        form.append('albumId', albumId);
+        $.ajax({
+            url: '/photos',
+            data: form,
+            cache: false,
+            contentType: false,
+            processData: false,
+            type: 'POST',
+            success: function success(response) {
+                console.log(response);
+                //loading table after success
+
+                //hiding modal
+                $('#myModal').modal('hide');
+                //resetting form
+                $("#createForm")[0].reset();
+                //loading only the table
+                $("#photoBox").load("http://www.completelaravel.com/albums/" + response + " #photoBox > *");
+            },
+            error: function error(data) {
+                //emptying the error div
+                $(".errors").html('');
+                //errors from controller@edit in json
+                var errors = data.responseJSON;
+                var x;
+                //printing the errors on errors div(appending the error )
+                for (x in errors) {
+                    $(".errors").append("<div class='alert alert-danger'>" + errors[x][0] + "</div>");
+                }
+                // Render the errors with js ...
+            }
+        });
+    });
+
+    $(document).on('click', '.updateAlbumBtn', function (event) {
+
+        //preventing the default behaviour of <a> tag
+        event.preventDefault();
+        $(".errorsUpdate").html('');
+        $(".errors").html('');
+        $("#outputUpdate").hide();
+        //getting the id for the post that we clicked
+        var id = $(this).attr("data-id");
+        $("#id").val(id);
+        //ajax request to server(edit method) and getting the result
+        $.get('/albums/' + id + '/edit', { 'id': id, '_token': $('input[name=_token]').val() }, function (data) {
+            //data from server
+            console.log(data);
+            //filling the title input
+            $("#updateAlbumTitle").val(data.name);
+            //showing the image from the post that we are editing
+            $("#imageShown").attr('src', "/images/" + data.cover_image);
+
+            $("#updateAlbumDescription").val(data.description);
+        });
+    });
+
+    $("#saveUpdateAlbumBtn").click(function () {
+
+        //getting all the values that the user has entered
+        var albumName = $("#updateAlbumTitle").val();
+        var albumDescription = $("#updateAlbumDescription").val();
+
+        var id = $("#id").val();
+
+        var coverImage = $('#coverImageUpdate')[0].files[0];
+
+        var _token = $('input[name=_token]').val();
+        // appending all data to our form object
+        form = new FormData();
+
+        form.append('albumName', albumName);
+        form.append('albumDescription', albumDescription);
+        form.append('coverImage', coverImage);
+        form.append('_token', _token);
+        form.append('id', id);
+
+        $.ajax({
+            url: '/albums/update',
+            data: form,
+            cache: false,
+            contentType: false,
+            processData: false,
+            type: 'POST',
+            success: function success(response) {
+                console.log(response);
+
+                //hide the preview image
+                $("#outputUpdate").hide();
+                //hiding modal
+                $('#myModalUpdate').modal('hide');
+                //resetting form
+                $("#updateForm")[0].reset();
+                //loading only the table
+                $("#albumBox").load("http://www.completelaravel.com/albums #albumBox > *");
+            },
+            error: function error(data) {
+                //errors from controller@edit in json
+                console.log(data);
+                var errors = data.responseJSON;
+                var x;
+                //printing the errors on errors div(appending the error )
+                for (x in errors) {
+                    $(".errorsUpdate").append("<div class='alert alert-danger'>" + errors[x][0] + "</div>");
+                }
+                // Render the errors with js ...
+            }
+        });
+    });
+
+    $(document).on("click", ".confirmBtnDeleteAlbum", function (e) {
+        e.preventDefault();
+        // saving $(this)(clicked delete button) in variable so that we can use it in the callback function
+        var id = $("#id").val();
+
+        //using bootbox modal plugin
+        bootbox.hideAll();
+        bootbox.confirm({
+            message: "Are you sure you want to delete this album?",
+            buttons: {
+                confirm: {
+                    label: 'Yes',
+                    className: 'btn-success'
+                },
+                cancel: {
+                    label: 'No',
+                    className: 'btn-danger'
+                }
+            },
+            callback: function callback(result) {
+                if (result === true) {
+                    //we are getting the value of the attribute from the button(a)
+
+                    $.ajax({
+                        url: "/albums/delete",
+                        //we need to send the id of the movie to be deleted
+                        data: { 'id': id, '_token': $('input[name=_token]').val() },
+                        type: "POST",
+                        success: function success(data) {
+                            $("#albumBox").load("http://www.completelaravel.com/albums #albumBox > *");
+                        }
+                    });
+                }
+            }
+        });
+    });
+
+    $(document).on("click", ".confirmBtnDeletePhoto", function (e) {
+        e.preventDefault();
+        // saving $(this)(clicked delete button) in variable so that we can use it in the callback function
+        var id = $(this).attr('data-id');
+        var albumId = $(this).attr('data-albumId');
+        //console.log(id);
+        //using bootbox modal plugin
+        bootbox.hideAll();
+        bootbox.confirm({
+            message: "Are you sure you want to remove this photo from your album?",
+            buttons: {
+                confirm: {
+                    label: 'Yes',
+                    className: 'btn-success'
+                },
+                cancel: {
+                    label: 'No',
+                    className: 'btn-danger'
+                }
+            },
+            callback: function callback(result) {
+                if (result === true) {
+                    //we are getting the value of the attribute from the button(a)
+
+                    $.ajax({
+                        url: "/photos/delete",
+                        //we need to send the id of the movie to be deleted
+                        data: { 'id': id, 'albumId': albumId, '_token': $('input[name=_token]').val() },
+                        type: "POST",
+                        success: function success(data) {
+                            $("#photoBox").load("http://www.completelaravel.com/albums/" + data + " #photoBox > *");
+                        }
+                    });
+                }
+            }
+        });
+    });
+});
+
+/***/ }),
+/* 48 */
+/***/ (function(module, exports) {
+
+// removed by extract-text-webpack-plugin
 
 /***/ })
 /******/ ]);

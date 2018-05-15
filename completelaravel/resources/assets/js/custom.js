@@ -1,6 +1,11 @@
 
 
 $(document).ready(function(){
+
+    $('.element').responsiveEqualHeightGrid();
+
+
+
     //tooltip for plus sign(adding post)
     $('[data-toggle="tooltip"]').tooltip();
     //in the textarea
@@ -308,11 +313,12 @@ $(document).ready(function(){
             {
                 url: '?page=' + page,
                 type: "get",
-                datatype: "html",
-                beforeSend: function()
-                {
-                    $("#post_container").html("<img style='margin-left:40%;width:100px' src='/images/loader.gif'> ");
-                }
+                datatype: "html"
+                //for loading image
+                // beforeSend: function()
+                // {
+                //     $("#post_container").html("<img style='margin-left:40%;width:100px' src='/images/loader.gif'> ");
+                // }
             })
             .done(function(data)
             {

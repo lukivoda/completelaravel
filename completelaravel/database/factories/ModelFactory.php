@@ -50,5 +50,6 @@ $factory->define(Post::class,function (Faker\Generator $faker) {
         'content' => $faker->text,
         'featured' => $faker->randomElement(['1.jpg','2.jpg','3.jpg']),
         'category_id' =>Category::all()->random()->id,
+        'slug' => $faker->word
     ];
 });

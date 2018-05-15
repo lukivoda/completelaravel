@@ -24,8 +24,14 @@ const app = new Vue({
 
 require("admin-lte");
 
+require("./equalheight");
+
 require("./custom");
 
 require("./categories");
 
 require("./tags");
+
+require("./album");
+
+

@@ -7,6 +7,12 @@ use Illuminate\Http\Request;
 
 class CategoryController extends Controller
 {
+
+    public function __construct()
+    {
+        $this->middleware('auth');
+    }
+
     /**
      * Display a listing of the resource.
      *
@@ -107,6 +113,11 @@ class CategoryController extends Controller
         $id = $request->id;
         $category = Category::find($id);
         $category->delete();
+        $response = array(
+            'status' => 'error',
+            'msg' => 'Category can not be deleted.',
+        );
+        return \Response::json($response);
     }
 
 }

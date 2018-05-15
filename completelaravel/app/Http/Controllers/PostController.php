@@ -12,6 +12,13 @@ use Illuminate\Support\Facades\Storage;
 
 class PostController extends Controller
 {
+
+
+    public function __construct()
+    {
+        $this->middleware('auth');
+    }
+
     /**
      * Display a listing of the resource.
      *
@@ -67,7 +74,7 @@ class PostController extends Controller
         $featured_new_name = time().$featured->getClientOriginalName();
         $featured->move("images",$featured_new_name);
 
-        $post = Post::create(['title'=>$request->title,"category_id"=>$request->category,'featured'=>$featured_new_name,'content'=>$request->writing]);
+        $post = Post::create(['title'=>$request->title,"category_id"=>$request->category,'featured'=>$featured_new_name,'content'=>$request->writing,'slug'=>str_slug($request->title)]);
         $post->tags()->attach($tags);
 
 
@@ -173,16 +180,7 @@ class PostController extends Controller
             $post->save();
             $post->tags()->sync($tags);
 
-
-
-
-
-
-
-
-
-
-//        Post::create(['title'=>$request->title,"category_id"=>$request->category,'featured'=>$featured_new_name,'content'=>$request->writing]);
+            //        Post::create(['title'=>$request->title,"category_id"=>$request->category,'featured'=>$featured_new_name,'content'=>$request->writing]);
 
 
     }
@@ -204,7 +202,5 @@ class PostController extends Controller
         $post->delete();
         //deleting old image from storage after deleting the post
         unlink('images/' . $post->featured);
-
-
-    }
+        }
 }

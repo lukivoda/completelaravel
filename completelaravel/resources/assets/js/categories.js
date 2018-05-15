@@ -170,7 +170,8 @@ $(document).ready(function() {
                                     $("#postBox").load("http://www.completelaravel.com/categories/create #postBox > *");
                                 },
                                 error: function(data) {
-                                    console.log(data);
+                                    var errors = data.responseJSON;
+                                    console.log(errors);
                                 }
                             });
                       bootbox.hideAll();

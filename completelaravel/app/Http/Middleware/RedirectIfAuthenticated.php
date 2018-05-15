@@ -22,5 +22,13 @@ class RedirectIfAuthenticated
         }
 
         return $next($request);
+
+//        if (Auth::guest())
+//        {
+//            return redirect('login');
+//        }
+//
+//        return $next($request);
+
     }
 }

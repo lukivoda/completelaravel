@@ -31,8 +31,11 @@
             <span class="logo-lg"><b>Admin</b>LTE</span>
         </a>
 
+
+
         <!-- Header Navbar -->
         <nav class="navbar navbar-static-top" role="navigation">
+
             <!-- Sidebar toggle button-->
             <a href="#" class="sidebar-toggle" data-toggle="push-menu" role="button">
                 <span class="sr-only">Toggle navigation</span>
@@ -78,6 +81,13 @@
                 <li class="active"><a href="{{route('posts.create')}}"><i class="fa fa-link"></i> <span>Posts</span></a></li>
                 <li class="active"><a href="{{route('categories.create')}}"><i class="fa fa-link"></i> <span>Categories</span></a></li>
                 <li class="active"><a href="{{route('tags.create')}}"><i class="fa fa-link"></i> <span>Tags</span></a></li>
+                <li class="active"><a href="{{route('albums')}}"><i class="fa fa-link"></i> <span>Albums</span></a></li>
+                <hr>
+             <li><a href="{{ route('logout') }}" onclick="event.preventDefault(); document.getElementById('frm-logout').submit();" ><i class="fa fa-sign-out" aria-hidden="true"></i><span><b>Logout</b></span></a></li>
+
+                <form id="frm-logout" action="{{ route('logout') }}" method="POST" style="display: none;">
+                    {{ csrf_field() }}
+                </form>
 
 
             </ul>

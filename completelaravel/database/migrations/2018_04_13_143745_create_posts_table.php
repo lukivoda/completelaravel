@@ -19,6 +19,7 @@ class CreatePostsTable extends Migration
             $table->text('content');
             $table->string('featured');
             $table->integer('category_id')->unsigned();
+            $table->string('slug');
             $table->timestamps();
 
             $table->foreign('category_id')->references('id')->on('categories');

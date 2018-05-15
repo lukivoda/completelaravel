@@ -11,6 +11,7 @@ class Post extends Model
         'content',
         'featured',
         'category_id',
+        'slug'
 
     ];
 
