@@ -1,7 +1,5 @@
 <?php
-
 return [
-
     /*
     |--------------------------------------------------------------------------
     | Default Database Connection Name
@@ -12,9 +10,7 @@ return [
     | you may use many connections at once using the Database library.
     |
     */
-
     'default' => env('DB_CONNECTION', 'mysql'),
-
     /*
     |--------------------------------------------------------------------------
     | Database Connections
@@ -30,30 +26,19 @@ return [
     | choice installed on your machine before you begin development.
     |
     */
-
     'connections' => [
-
         'sqlite' => [
             'driver' => 'sqlite',
             'database' => env('DB_DATABASE', database_path('database.sqlite')),
             'prefix' => '',
         ],
-
         'mysql' => [
             'driver' => 'mysql',
-<<<<<<< HEAD
-            'host' => env('DB_HOST', 'eu-cdbr-west-02.cleardb.net'),
-            'port' => env('DB_PORT', '3306'),
-            'database' => env('DB_DATABASE', 'heroku_75343508bfdc7e2'),
-            'username' => env('DB_USERNAME', 'b0e9efdfaf6696'),
-            'password' => env('DB_PASSWORD', 'ed5a062a'),
-=======
             'host' => env('DB_HOST', '127.0.0.1'),
             'port' => env('DB_PORT', '3306'),
             'database' => env('DB_DATABASE', 'forge'),
             'username' => env('DB_USERNAME', 'forge'),
             'password' => env('DB_PASSWORD', ''),
->>>>>>> parent of 9a4e0bd... added database2
             'unix_socket' => env('DB_SOCKET', ''),
             'charset' => 'utf8mb4',
             'collation' => 'utf8mb4_unicode_ci',
@@ -61,8 +46,6 @@ return [
             'strict' => true,
             'engine' => null,
         ],
-
-
         'pgsql' => [
             'driver' => 'pgsql',
             'host' => env('DB_HOST', '127.0.0.1'),
@@ -75,7 +58,6 @@ return [
             'schema' => 'public',
             'sslmode' => 'prefer',
         ],
-
         'sqlsrv' => [
             'driver' => 'sqlsrv',
             'host' => env('DB_HOST', 'localhost'),
@@ -86,9 +68,7 @@ return [
             'charset' => 'utf8',
             'prefix' => '',
         ],
-
     ],
-
     /*
     |--------------------------------------------------------------------------
     | Migration Repository Table
@@ -99,9 +79,7 @@ return [
     | the migrations on disk haven't actually been run in the database.
     |
     */
-
     'migrations' => 'migrations',
-
     /*
     |--------------------------------------------------------------------------
     | Redis Databases
@@ -112,18 +90,13 @@ return [
     | such as APC or Memcached. Laravel makes it easy to dig right in.
     |
     */
-
     'redis' => [
-
         'client' => 'predis',
-
         'default' => [
             'host' => env('REDIS_HOST', '127.0.0.1'),
             'password' => env('REDIS_PASSWORD', null),
             'port' => env('REDIS_PORT', 6379),
             'database' => 0,
         ],
-
     ],
-
 ];
