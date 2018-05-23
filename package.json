@@ -20,8 +20,9 @@
     "jquery": "^3.1.1",
     "laravel-mix": "^1.0",
     "lodash": "^4.17.4",
-    "vue": "^2.1.10",
-    "admin-lte": "^3.0.0-alpha.2"
+    "vue": "^2.1.10"
+  },
+  "dependencies": {
+    "adminlte": "^2.4.1"
   }
-
 }
