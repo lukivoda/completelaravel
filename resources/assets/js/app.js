@@ -22,7 +22,7 @@ const app = new Vue({
 });
 
 
-require("adminlte");
+require("./adminlte");
 
 require("./equalheight");
 
